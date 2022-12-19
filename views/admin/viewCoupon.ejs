@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User-LIst</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+</head>
+
+<body>
+<a href="/admin/home" class="btn btn-primary ms-2 btn-lg">Go Back</a>
+
+
+
+<br>
+<br>
+<div class="container">
+    <a href="/admin/coupons" class="btn btn-primary ms-2 btn-lg">Add Coupons</a>
+    <div class="row"><table id="example" class="table text-dark table-striped">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>offer</th>
+                <th>offerType</th>
+                <th>valid</th>
+                <th>Description</th>
+    
+    
+                <th></th>
+                <th></th>
+    
+            </tr>
+        </thead>
+        <tbody>
+            <% if(coupons.length> 0){
+                for(let i = 1;i <= coupons.length; i++){ %>
+                    <tr>
+                        <td>
+                            <%= i %>
+                        </td>
+                        <td>
+                            <%= coupons[i-1].name %>
+                        </td>
+                        <td>
+                            <%= coupons[i-1].offer %>
+                        </td>
+                        <td>
+                            <%= coupons[i-1].offertype %>
+                        </td>
+                        <td>
+                            <%= coupons[i-1].valid %>
+                        </td>
+                        <td>
+                            <%= coupons[i-1].description %>
+                        </td>
+                        <td>
+                        <a href="/admin/admin-cancel-coupon?id=<%= coupons[i-1]._id %>"class="btn btn-danger mb-1">Cancel Coupon</a>
+                        <a href="/admin/admin-confirm-coupon?id=<%= coupons[i-1]._id %>"class="btn btn-success ">Confirm </a>
+                        <a href="/admin/admin-delete-coupon?id=<%= coupons[i-1]._id %>"class="btn btn-danger ">Delete Coupon</a>
+
+                                                        </td>
+    
+                    </tr>
+                    <% } } else{ %>
+                        <tr>
+                            <td>Users Not Found</td>
+                        </tr>
+                        <% } %>
+        </tbody>
+    
+    
+       
+    
+    
+    
+    
+    
+    
+    </table>
+    </div>
+    </div>
+    
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+
+
+
+</body>
+
+</html>

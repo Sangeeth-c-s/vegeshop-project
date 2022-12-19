@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User-LIst</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+</head>
+
+<body>
+    <a href="/admin/home" class="btn btn-primary ms-2 btn-lg">Go Back</a>
+
+    <br>
+    <br>
+    <div class="container">
+        <div class="row">
+            <table id="example" class="table text-dark table-striped">
+                
+                   
+
+                <tbody>
+                    
+                    <% if(id=='CONFIRMED' ){ %>
+                    
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped " style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">SI NO</th>
+                                        <th scope="col">Order Id</th>
+                                        
+                                        <th scope="col">Time</th>
+                                        <th scope="col">Mode</th>
+                                        <th scope="col">Total Price</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if( order.length> 0){ %>
+                                        <% for(let i=1;i <=order.length; i++){ %>
+                                            <% if(order[i-1].status=="Confirmed" ){ %>
+                                                <tr>
+                                                    <th scope="row">
+                                                        <%= i %>
+                                                    </th>
+                                                    <td>
+                                                        <%= order[i-1]._id %>
+                                                    </td>
+                                                    
+                                                    <td>
+                                                        <%= order[i-1].createdAt %>
+                                                    </td>
+                                                    <td>
+                                                        <%= order[i-1].payment %>
+                                                    </td>
+                                                    <td>
+                                                        <%= order[i-1].products.totalPrice %>
+                                                    </td>
+                                                    <td>
+                                                        <%= order[i-1].status %>
+                                                    </td>
+                                                    <td>
+                                                        <a href="/admin/admin-cancel-order?id=<%= order[i-1]._id %>"
+                                                            class="btn btn-danger mb-1">Cancel Order</a>
+                                                        <a href="/admin/admin-delivered-order?id=<%= order[i-1]._id %>"
+                                                            class="btn btn-danger ">Deliver Order</a>
+                                                    </td>
+                                                </tr>
+                                                <% }}}else{ %>
+                                                    <tr>
+                                                        <td colspan="5">Orders Not Found</td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    
+                        <% }else if(id=='DELIVERED' ){ %>
+                    
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped " style="table-layout: fixed;">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">SI NO</th>
+                                            <th scope="col">Order Id</th>
+                                            
+                                            <th scope="col">Time</th>
+                                            <th scope="col">Mode</th>
+                                            <th scope="col">Total Price</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if( order.length> 0){ %>
+                                            <% for(let i=1;i <=order.length; i++){ %>
+                                                <% if(order[i-1].status=="Delivered" ){ %>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            <%= i %>
+                                                        </th>
+                                                        <td>
+                                                            <%= order[i-1]._id %>
+                                                        </td>
+                                                       
+                                                        <td>
+                                                            <%= order[i-1].createdAt %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order[i-1].payment %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order[i-1].products.totalPrice %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order[i-1].status %>
+                                                        </td>
+                                                        <td>
+                                                            <a href="/admin/admin-cancel-order?id=<%= order[i-1]._id %>"
+                                                                class="btn btn-danger mb-1">Cancel Order</a>
+                                                        </td>
+                                                    </tr>
+                                                    <% }}}else{ %>
+                                                        <tr>
+                                                            <td colspan="5">Orders Not Found</td>
+                                                        </tr>
+                                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                    
+                            <% }else{ %>
+                    
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped " style="table-layout: fixed;">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">SI NO</th>
+                                                <th scope="col">Order Id</th>
+                                                
+                                                <th scope="col">Time</th>
+                                                <th scope="col">Mode</th>
+                                                <th scope="col">Total Price</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% if( order.length> 0){ %>
+                                                <% for(let i=1;i <=order.length; i++){ %>
+                                                    <tr>
+                                                        <th scope="row">
+                                                            <%= i %>
+                                                        </th>
+                                                        
+                                                        <td>
+                                                            <%= order[i-1]._id %>
+                                                        </td>
+                                                        
+                                                        <td>
+                                                            <%= order[i-1].createdAt %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order[i-1].payment %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order[i-1].products.totalPrice %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order[i-1].status %>
+                                                        </td>
+                                                        <td>
+                                                            <a href="/admin/admin-cancel-order?id=<%= order[i-1]._id %>"
+                                                                class="btn btn-danger mb-1">Cancel Order</a>
+                                                            <a href="/admin/admin-confirm-order?id=<%= order[i-1]._id %>"
+                                                                class="btn btn-danger ">Confirm Order</a>
+                                                        </td>
+                                                    </tr>
+                                                    <% }}else{ %>
+                                                        <tr>
+                                                            <td colspan="5">Orders Not Found</td>
+                                                        </tr>
+                                                        <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                    
+                                <% } %>
+
+                                
+                                
+               
+
+
+
+
+
+
+        
+        </div>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>$(document).ready(function () {
+            $('#example').DataTable();
+        });</script>
+
+</body>
+
+</html>

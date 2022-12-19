@@ -1,0 +1,68 @@
+<%- include('../layouts/proheader') %>
+<a href="/admin/home" class="btn btn-primary ms-2 btn-lg">Go Back</a>
+<br>
+<br>
+<div class="container">
+    <table class="table text-dark">
+
+        <tr>
+            <th>No</th>
+            <th>Game Name</th>
+            <th>Platform</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Rating</th>
+            <th>Image</th>
+            <th>Actions</th>
+
+
+            <th></th>
+            <th></th>
+
+        </tr>
+        <% if(products.length> 0){
+            for(let i = 1;i <= products.length; i++){ %>
+                <tr>
+                    <td>
+                        <%= i %>
+                    </td>
+                    <td>
+                        <%= products[i-1].name %>
+                    </td>
+                    <td>
+                        <%= products[i-1].platform %>
+                    </td>
+                    <td>
+                        <%= products[i-1].price %>
+                    </td>
+                    <td>
+                        <%= products[i-1].description %>
+                    </td>
+                    <td>
+                        <%= products[i-1].rating %>
+                    </td>
+
+                    <td>
+                        <% if(products[i-1].image) { %>
+                            <img src="/assets/uploads/<%= products[i-1].image %>" alt="Profile image" width="100vw"
+                                height="100vh">
+                            <% } %>
+                    </td>
+                    <td><a href="/admin/edit-product?id=<%= products[i-1]._id %>" class="btn btn-primary ms-2 ">Edit</a>
+                    </td>
+                    <td><a href="/admin/delete-product?id=<%= products[i-1]._id %>"
+                            class="btn btn-primary ms-2 ">Delete</a></td>
+
+
+                </tr>
+                <% } } else{ %>
+                    <tr>
+                        <td colspan="5">Users Not Found</td>
+                    </tr>
+                    <% } %>
+
+
+
+    </table>
+</div>
+<%- include('../layouts/profooter') %>

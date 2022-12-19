@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User-LIst</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+</head>
+
+<body>
+<a href="/admin/home" class="btn btn-primary ms-2 btn-lg">Go Back</a>
+
+<br>
+<br>
+<div class="container">
+    <div class="row"><table id="example" class="table text-dark table-striped">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Actions</th>
+    
+    
+                <th></th>
+                <th></th>
+    
+            </tr>
+        </thead>
+    
+        <tbody>
+            <% if(users.length> 0){
+                for(let i = 1;i <= users.length; i++){ %>
+                    <tr>
+                        <td>
+                            <%= i %>
+                        </td>
+                        <td>
+                            <%= users[i-1].name %>
+                        </td>
+                        <td>
+                            <%= users[i-1].email %>
+                        </td>
+                        <td>
+                            <%= users[i-1].mobile %>
+                        </td>
+                        <td><a href="/admin/block-user?id=<%= users[i-1]._id %>" class="btn btn-primary ms-2 ">
+                                <% if(users[i-1].isVerified) { %>
+                                    Block
+                                    <% }else{ %>
+                                        Unblock
+                                        <% } %>
+                            </a></td>
+    
+                    </tr>
+                    <% } } else{ %>
+                        <tr>
+                            <td>Users Not Found</td>
+                        </tr>
+                        <% } %>
+        </tbody>
+    
+    
+    
+    
+    
+    
+    </table>
+    </div>
+    </div>
+    
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+
+
+</body>
+
+</html>
