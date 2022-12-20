@@ -10,9 +10,7 @@ const config = require('../config/config');
 user_route.use(
 	session({
 		secret: config.sessionSecret,
-		resave: false,
-		saveUninitialized: true,
-		cookie: { secure: true },
+		
 	})
 );
 
