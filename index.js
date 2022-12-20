@@ -37,6 +37,6 @@ const admin_route = require('./routes/adminroute');
 app.use('/admin',admin_route);
 
 
-app.listen(3000, () => {
+app.listen(5000, () => {
 	console.log('server is running...');
 });
