@@ -47,6 +47,9 @@ user_route.get('/logout', auth.isLogout, userController.logout);
 
 user_route.get('/profile', auth.isLogin, userController.profile);
 
+user_route.post('/profile', auth.isLogin, userController.addressDetails);
+
+
 user_route.get('/add-to-cart', userController.addToCart);
 
 user_route.get('/delete-cart', userController.deleteCart);

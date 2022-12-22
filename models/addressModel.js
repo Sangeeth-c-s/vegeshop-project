@@ -12,6 +12,10 @@ const addressSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	phone: {
+		type: Number,
+		required:true,
+	},
 	country: {
 		type: String,
 		required: true,
@@ -25,13 +29,8 @@ const addressSchema = new mongoose.Schema({
 		required: true,
 	},
 	zip: {
-		type: String,
+		type: Number,
 		required: true,
-	},
-	createdAt: {
-		type: Date,
-		immutable: true,
-		default: () => Date.now(),
 	},
 
 });

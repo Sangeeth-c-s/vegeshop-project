@@ -4,6 +4,7 @@ const User = require('../models/usermodel');
 const bcrypt = require('bcrypt');
 const Product = require('../models/productmodel');
 const Orders = require('../models/orderModel');
+const Address = require('../models/addressModel');
 const fast2sms = require('fast-two-sms');
 const Coupon = require('../models/couponsmodel');
 
@@ -770,6 +771,34 @@ const orderDetails = async (req, res) => {
   
 };
 
+const addressDetails = async (req, res) => {
+	try {
+		userSession = req.session;
+		if (userSession.user_id) {
+			const userData = await User.findById({ _id: userSession.user_id });
+
+			if (userData) {
+				const address = Address({
+					userId: userSession.user_id,
+					name: req.body.name,
+					phone: req.body.phone,
+					country: req.body.country,
+					address: req.body.address,
+					city: req.body.city,
+					zip: req.body.zip,
+					
+				});
+				console.log('hi');
+				const addressData = await address.save();
+				req.session.currentOrder = address._id;
+				res.redirect('/profile');
+			}
+		}
+	} catch (error) {
+		console.log(error.message);	
+	}
+};
+
 
 module.exports = {
 	verifyLogin,
@@ -803,4 +832,5 @@ module.exports = {
 	loadCoupons,
 	couponCheck,
 	orderDetails,
+	addressDetails,
 };
