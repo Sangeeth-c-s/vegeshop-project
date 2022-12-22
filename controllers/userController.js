@@ -285,14 +285,11 @@ const loadwishlist = async (req, res, next) => {
 };
 
 const logout = async (req, res) => {
-	try {
-		userSession.user_id = false;
-		isLoggedin = false;
-
-		res.redirect('/');
-	} catch (error) {
-		console.log(error.message);
-	}
+	
+	userSession.user_id = false;
+	isLoggedin = false;
+	console.log('loggedout');
+	res.render('home');
 };
 
 const profile = async (req, res) => {

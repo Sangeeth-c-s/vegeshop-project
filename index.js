@@ -50,6 +50,6 @@ app.use('/', user_route);
 app.use('/admin',admin_route);
 
 
-app.listen(5000, () => {
+app.listen(3000, () => {
 	console.log('server is running...');
 });

@@ -43,7 +43,7 @@ user_route.get('/cart',  userController.loadcart);
 
 user_route.get('/wishlist', auth.isLogin, userController.loadwishlist);
 
-user_route.get('/logout', auth.isLogout, userController.logout);
+user_route.get('/logout', userController.logout);
 
 user_route.get('/profile', auth.isLogin, userController.profile);
 
