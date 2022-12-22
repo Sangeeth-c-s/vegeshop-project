@@ -140,7 +140,7 @@ const logout = async (req, res) => {
 	} catch(error) {
 		console.log(error.message);
 	}
-};
+};	
 
 const adminDashboard = async (req, res) => {
 	try {
