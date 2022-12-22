@@ -10,9 +10,8 @@ const Coupon = require('../models/couponsmodel');
 
 
 
-let userSession = false || {};
-let isLoggedin;
-isLoggedin = false;
+
+
 // eslint-disable-next-line no-unused-vars
 let newUser;
 let newOtp;
@@ -285,11 +284,11 @@ const loadwishlist = async (req, res, next) => {
 };
 
 const logout = async (req, res) => {
-	
-	userSession.user_id = false;
-	isLoggedin = false;
+	req.session.destroy();
+	res.redirect('/');
 	console.log('loggedout');
-	res.render('home');
+	
+	
 };
 
 const profile = async (req, res) => {

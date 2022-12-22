@@ -27,7 +27,7 @@ user_route.use(express.urlencoded({extended:true}));
 
 const userController = require('../controllers/userController');
 
-user_route.get('/', auth.isLogout, userController.loadLandingPage);
+user_route.get('/', userController.loadLandingPage);
 
 user_route.get('/login', auth.isLogout, userController.loadloginPage);
 
@@ -43,7 +43,7 @@ user_route.get('/cart',  userController.loadcart);
 
 user_route.get('/wishlist', auth.isLogin, userController.loadwishlist);
 
-user_route.get('/logout', userController.logout);
+user_route.get('/logout', auth.isLogin, userController.logout);
 
 user_route.get('/profile', auth.isLogin, userController.profile);
 
