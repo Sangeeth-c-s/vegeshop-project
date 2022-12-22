@@ -136,7 +136,8 @@ const loadAdminHome = async(req,res)=>{
 
 const logout = async (req, res) => {
 	try {
-		res.render('login');
+		req.session.destroy();
+		res.redirect('/admin/login');
 	} catch(error) {
 		console.log(error.message);
 	}
