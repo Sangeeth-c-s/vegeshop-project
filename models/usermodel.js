@@ -25,7 +25,6 @@ const userSchema = new mongoose.Schema({
 	},
 	mobileNumber: {
 		type: Number,
-    
 	},
 	otp: {
 		type: Number,
@@ -33,6 +32,7 @@ const userSchema = new mongoose.Schema({
 	cart: {
 		items: [
 			{
+				
 				productId: {
 					type: mongoose.Types.ObjectId,
 					ref: 'product',
@@ -99,14 +99,20 @@ userSchema.methods.addToCart = function (product) {
 };
 userSchema.methods.removefromCart = async function (productId) {
 	const cart = this.cart;
-	console.log(this);
+	// console.log(this);
 	const isExisting = cart.items.findIndex((objInItems) => {
-		new String(objInItems.productId).trim() === new String(productId).trim();
+		return (
+			objInItems.productId == productId
+			// new String(objInItems.productId).trim() === new String(productId).trim()
+		);
 	});
+	console.log(isExisting);
+	console.log('isExisting', isExisting);
 	if (isExisting >= 0) {
 		const prod = await Product.findById(productId);
-		cart.totalPrice -= prod.price * cart.item[isExisting].qty;
-		cart.item.splice(isExisting, 1);
+		// console.log('prod',prod);
+		cart.totalPrice -= prod.price * cart.items[isExisting].qty;
+		cart.items.splice(isExisting, 1);
 		console.log('User in schema:', this);
 		return this.save();
 	}
@@ -140,12 +146,12 @@ userSchema.methods.removefromWishlist = async function (productId) {
 	const wishlist = this.wishlist;
 	console.log(wishlist);
 	const isExisting = wishlist.items.findIndex((objInItems) => {
-		new String(objInItems.productId).trim() === new String(productId).trim();
+		return (new String(objInItems.productId).trim() === new String(productId).trim());
 	});
 	if (isExisting >= 0) {
 		const prod = await Product.findById(productId);
-		wishlist.totalPrice -= prod.price * wishlist.item[isExisting].qty;
-		wishlist.item.splice(isExisting, 1);
+		wishlist.totalPrice -= prod.price * wishlist.items[isExisting].qty;
+		wishlist.items.splice(isExisting, 1);
 		console.log('User in schema:', this);
 		return this.save();
 	}

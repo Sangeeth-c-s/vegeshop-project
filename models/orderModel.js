@@ -44,21 +44,21 @@ const orderSchema = new mongoose.Schema({
 		default: () => Date.now(),
 	},
 
-
 	products: {
-		item: [
+		items: [
 			{
+				
 				productId: {
 					type: mongoose.Types.ObjectId,
-					ref: 'Product',
-					// required:true
-				},
-				qty: {
-					type: Number,
+					ref: 'product',
 					// required:true
 				},
 				price: {
 					type: Number,
+				},
+				qty: {
+					type: Number,
+					// required:true
 				},
 			},
 		],

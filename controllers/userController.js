@@ -114,7 +114,7 @@ const verifyLogin = async (req, res) => {
 		console.log(email,'mail');
 
 		const userData = await User.findOne({ email: email });
-		console.log(userData,'user');
+		
 		if (userData) {
 			const passwordMatch = await bcrypt.compare(password, userData.password);
 			if (passwordMatch) {
@@ -127,8 +127,7 @@ const verifyLogin = async (req, res) => {
 						userSession = req.session;
 						userSession.user_id = userData._id;
 						req.session.userID = userData._id;
-						console.log(req.session.userID, '22');
-						console.log(userSession.user_id, '33');
+						
 						isLoggedin = true;
 						res.redirect('/home');
 						console.log('logged in');
@@ -150,9 +149,12 @@ const verifyLogin = async (req, res) => {
 const loadloghome = async (req, res) => {
 	try {
 		userSession = req.session;
-		const user = await User.find({});
-		console.log(user.cart);
-		res.render('loghome',{product:user});
+		const user = await User.findById({ _id: userSession.user_id });
+		if (user) {
+			console.log(user.cart);
+			res.render('loghome', { product: user.cart });	
+		}
+		
 	} catch (error) {
 		console.log(error.message);
 	}
@@ -161,6 +163,8 @@ const loadloghome = async (req, res) => {
 const loadshop = async (req, res) => {
 	try {
 		userSession = req.session;
+		const user = await User.findById({ _id: userSession.user_id });
+
 		userSession.choice = 'All';
 		var search = '';
 		if (req.query.search) {
@@ -196,6 +200,7 @@ const loadshop = async (req, res) => {
 			choice: userSession.choice,
 			totalpages: Math.ceil(count / limit),
 			currentpage: new Number(page),
+			product: user.cart,
 		});
 	} catch (error) {
 		console.log(error.message);
@@ -205,12 +210,16 @@ const loadshop = async (req, res) => {
 const loadcart = async (req, res, next) => {
 	try {
 		userSession = req.session;
+	
+		const user = await User.findById({ _id: userSession.user_id });
+		
 		if (userSession.user_id) {
 			const userData = await User.findById({ _id: userSession.user_id });
 			const completeUser = await userData.populate('cart.items.productId');
 			res.render('cart', {
 				isLoggedin,
 				cartProducts: completeUser.cart,
+				product: user.cart,
 			});
 		} else {
 			res.render('cart', { isLoggedin, id: userSession.user_id });
@@ -289,10 +298,9 @@ const profile = async (req, res) => {
 	try {
 		userSession = req.session;
     
-    
 		const userData = await User.findById({ _id: userSession.user_id });
     
-		res.render('profile', { User: userData});
+		res.render('profile', { User: userData, product: userData.cart,wishlist: userData.wishlist });
 	} catch (error) {
 		console.log(error.message);
 	}
@@ -311,12 +319,15 @@ const addToCart = async (req, res) => {
 const loadCheckout = async (req, res) => {
 	try {
 		userSession = req.session;
+		const user = await User.findById({ _id: userSession.user_id });
+
 		if (userSession.user_id) {
 			const userData = await User.findById({ _id: userSession.user_id });
 			const completeUser = await userData.populate('cart.items.productId');
 			res.render('checkout', {
 				isLoggedin,
 				cartProducts: completeUser.cart,
+				product: user.cart,
 			});
 		} else {
 			res.render('checkout', { isLoggedin, id: userSession.user_id });
@@ -355,6 +366,7 @@ const storeOrder = async (req, res) => {
 				});
 				console.log('hi');
 				const orderData = await order.save();
+				req.session.currentOrder = order._id;
 
 				if (req.body.payment == 'Cash-on-Dilevery') {
 					res.redirect('/orderSuccess');
@@ -747,8 +759,11 @@ const orderDetails = async (req, res) => {
 	try {
 		userSession = req.session;
 		const userData = await User.findById({ _id: userSession.user_id });
-		const orderData = await Orders.find({ userId: userSession.user_id });
-		res.render('orderDetails', { userId: userData, userOrders: orderData });
+		const orderData = await Orders.findById({ _id: req.query.id }).populate('products.items.productId');
+		const order = await Orders.findById({ _id: req.query.id });
+		
+		console.log(orderData.products.items,'pro');
+		res.render('orderDetails', {order:order,  userOrders: orderData.products.items,user:userData });
 	} catch (error) {
 		console.log(error.message);
 	}

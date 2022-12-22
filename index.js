@@ -12,8 +12,10 @@ mongoose.connect(dbpath.dbpath, () => {
 
 const User = require('./models/usermodel');
 const Product = require('./models/productmodel');
+const Category = require('./models/categoryModel');
 
-
+const user_route = require('./routes/userRoute');
+const admin_route = require('./routes/adminroute');
 const path = require('path');
 
 
@@ -26,14 +28,25 @@ app.use(function (req, res, next) {
 	next();
 });
 
-app.use(express.static('public'));
+user_route.set('view engine', 'ejs');
+user_route.set('views', './views/user');
+user_route.use('/', express.static('public'));
+
+admin_route.set('view engine','ejs');
+admin_route.set('views', './views/admin');
+admin_route.use('/', express.static('public'));
+admin_route.use('/', express.static('public/admin'));
+admin_route.use('/', express.static('public/admin/assets'));
 
 
 
-const user_route = require('./routes/userRoute');
+
+
+
+
+
+
 app.use('/', user_route);
-
-const admin_route = require('./routes/adminroute');
 app.use('/admin',admin_route);
 
 

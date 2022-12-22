@@ -49,7 +49,7 @@
                         <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
                         <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
                         <li class="nav-item cta cta-colored"><a href="/cart" class="nav-link"><span
-                                    class="icon-shopping_cart"></span>[0]</a></li>
+                                    class="icon-shopping_cart"></span>[<%= product.items.length %>]</a></li>
 
                     </ul>
                 </div>
@@ -128,6 +128,7 @@
                 <div class="row">
                     <% if(products.length> 0){
                         for(let i = 1;i <= products.length; i++){ %>
+                            <% if(products[i-1].soft == 0) {%>
 
                             <div class="col-md-6 col-lg-3 ftco-animate">
 
@@ -163,13 +164,15 @@
                                                     <a href="/add-to-wishlist?id=<%= products[i-1]._id %>"
                                                         class="heart d-flex justify-content-center align-items-center ">
                                                         <span><i class="ion-ios-heart"></i></span>
+                                                        
                                                         <% } %>
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+                            <% } %>
                             <% } %>
                                 
                                 <% } else{ %>

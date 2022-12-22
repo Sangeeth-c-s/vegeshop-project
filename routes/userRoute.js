@@ -35,10 +35,6 @@ user_route.post('/login',userController.verifyLogin);
 
 user_route.post('/registration', userController.insertUser);
 
-// user_route.get("/verifyOtp", userController.loadOtp);
-
-// user_route.post("/verifyOtp", userController.verifyOtp);
-
 user_route.get('/home', auth.isLogin, userController.loadloghome);
 
 user_route.get('/shop',auth.isLogin, userController.loadshop);
@@ -96,19 +92,5 @@ user_route.get('/coupons', auth.isLogin, userController.loadCoupons);
 user_route.post('/coupon', auth.isLogin, userController.couponCheck);
 
 user_route.get('/order-details', auth.isLogin, userController.orderDetails);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = user_route;

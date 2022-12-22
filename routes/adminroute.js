@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 const admin_route = express();
 
@@ -11,10 +12,12 @@ const bodyParser = require('body-parser');
 admin_route.use(bodyParser.json());
 admin_route.use(bodyParser.urlencoded({ extended: true }));
 
-admin_route.set('view engine', 'ejs');
-admin_route.set('views', './views/admin');
+
 
 const auth = require('../middleware/adminauth');
+const Category = require('../models/categoryModel');
+
+
 
 const adminController = require('../controllers/admincontroller');
 
@@ -22,9 +25,12 @@ admin_route.get('/',auth.isLogout, adminController.loadLogin);
 
 admin_route.post('/', adminController.verifyLogin);
 
-admin_route.get('/home',auth.isLogin, adminController.loadDashboard);
+admin_route.get('/home', auth.isLogin, adminController.loadAdminHome);
 
-admin_route.get('/logout',auth.isLogout, adminController.logout);
+admin_route.get('/logout', auth.isLogout, adminController.logout);
+
+
+
 
 // admin_route.get("*", (req, res) => {
 //   res.redirect("/admin");
@@ -111,6 +117,16 @@ admin_route.get(
 	auth.isLogin,
 	adminController.adminDeleteCoupon
 );
+
+admin_route.get('/user-list', auth.isLogin, adminController.userlist);
+
+admin_route.get('/category', auth.isLogin, adminController.loadCategory);
+admin_route.post('/category', auth.isLogin, adminController.addCategory);
+
+admin_route.get('/delete-category', auth.isLogin, adminController.deleteCategory);
+
+
+
 
 
 

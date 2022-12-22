@@ -6,6 +6,7 @@ const Product = require('../models/productmodel');
 const userModel = require('../models/usermodel');
 const Order = require('../models/orderModel');
 const Coupon = require('../models/couponsmodel'); 
+const Category = require('../models/categoryModel');
 
 
 let isAdminLoggedin;
@@ -65,10 +66,69 @@ const verifyLogin = async (req, res) => {
 	}
 };
 
-const loadDashboard = async (req, res)=>{
+const loadhome = async (req, res)=>{
 	try {
-		const userData  = await User.findById({_id:req.session.user_id});
+		
+		const userData = await User.findById({ _id: req.session.user_id });
+		
 		res.render('adminhome', { admin:userData});
+	} catch (error) {
+		console.log(error.message);
+	}
+};
+
+const loadAdminHome = async(req,res)=>{
+	try {
+		adminSession = req.session;
+		// const userData = await User.findById({ _id: req.session.user_id });
+		const categoryData = await Category.find();
+		const categoryArray = [];
+		const orderGenreCount = [];
+		for (let key of categoryData) {
+			categoryArray.push(key.name);
+			orderGenreCount.push(0);
+		}
+		console.log('categoryArray', categoryArray);
+		console.log('orderGenreCount', orderGenreCount);
+		const completeorder = [];
+		const orderData = await Order.find();
+
+		for (let key of orderData) {
+			const uppend = await key.populate('products.items.productId');
+			completeorder.push(uppend);
+		}
+		// console.log('completeorder', completeorder);
+
+		for (let i = 0; i < completeorder.length; i++) {
+			console.log(
+				'completeorder[i].products.items.length',
+				completeorder[i].products.items.length
+			);
+
+			for (let j = 0; j < completeorder[i].products.items.length; j++) {
+				const genre = completeorder[i].products.items[j].productId.platform;
+				console.log(
+					'genre',
+					completeorder[i].products.items[j].productId.platform
+				);
+				const isExisting = categoryArray.findIndex((category) => {
+					return category === genre;
+				});
+				orderGenreCount[isExisting]++;
+			}
+		}
+
+		console.log('categoryArray:', categoryArray);
+		console.log('orderGenreCount:', orderGenreCount);
+		// console.log('genre: ',completeorder[0].products.items[0].productId.genre);
+		// const productData = await product.find();
+		const userData = await User.find();
+		res.render('adminhome', {
+			// products: productData,
+			admin: userData,
+			category: categoryArray,
+			count: orderGenreCount,
+		});
 	} catch (error) {
 		console.log(error.message);
 	}
@@ -85,8 +145,9 @@ const logout = async (req, res) => {
 const adminDashboard = async (req, res) => {
 	try {
       
-		const usersData = await User.find({ is_admin: 0 });
-		res.render('dashboard',{users:usersData});
+		const userData = await User.findById({ _id: req.session.user_id });
+		
+		res.render('dashboard',{users:userData,admin:userData});
 	} catch (error) {
 		console.log(error.message);
 	}
@@ -100,7 +161,7 @@ const blockUser = async (req, res) => {
 		} else {
 			await User.findByIdAndUpdate({ _id: id }, { $set: { isVerified: 1 } });
 		}
-		res.redirect('/admin/dashboard');
+		res.redirect('/admin/user-list');
 	} catch (error) {
 		console.log(error.message);
 	}
@@ -109,6 +170,7 @@ const blockUser = async (req, res) => {
 
 const path = require('path');
 const multer = require('multer');
+const { log } = require('console');
 let Storage = multer.diskStorage({
 	destination: './public/assets/uploads/',
 	filename: (req, file, cb) => {
@@ -131,12 +193,23 @@ const viewProduct = async (req, res) => {
 	}
 };
 
-const addProductLoad = (req, res) => {
-	res.render('addProduct');
+const addProductLoad = async (req, res) => {
+	try {
+		const categoryData = await Category.find();
+		console.log('category', categoryData);
+		if (categoryData) {
+			res.render('addProduct', { category: categoryData });	
+		}
+	} catch (error) {
+		console.log(error.message);
+	}
+
+	
 };
 const updateAddProduct = async (req, res) => {
 	try {
 		const spassword = await securePassword(req.body.password);
+		const category = await Category.find();
 		const product = Product({
 			name: req.body.gName,
 			platform: req.body.gPlatform,
@@ -149,10 +222,10 @@ const updateAddProduct = async (req, res) => {
 		const productData = await product.save();
 		if (productData) {
 			res.render('addProduct', {
-				message: 'Your registration was successfull.',
+				message: 'Your registration was successfull.',category
 			});
 		} else {
-			res.render('addProduct', { message: 'Your registration failed' });
+			res.render('addProduct', { message: 'Your registration failed',category });
 		}
 	} catch (error) {
 		console.log(error.message);
@@ -161,7 +234,7 @@ const updateAddProduct = async (req, res) => {
 const deleteProduct = async (req, res) => {
 	try {
 		const id = req.query.id;
-		const productData = await Product.deleteOne({ _id: id });
+		const productData = await Product.updateOne({_id:id},{ soft:1 });	
 		res.redirect('/admin/view-product');
 	} catch (error) {
 		console.log(error.message);
@@ -281,10 +354,71 @@ const adminDeleteCoupon = async (req, res) => {
 	res.redirect('/admin/viewCoupon');
 };
 
+const userlist = async (req, res) => {
+	try {
+		const usersData = await User.find({ is_admin: 0 });
+		userSession = req.session;
+		userSession.choice = 'All';
+		var search = '';
+		if (req.query.search) {
+			search = req.query.search;
+		}
+		var page = 1;
+		if (req.query.page) {
+			page = req.query.page;
+		}
+		const limit = 8;
+		const user = await User.find({
+			$or: [{ name: { $regex: '.*' + search + '.*', $options: 'i' } }],
+		})
+			.limit(limit * 1)
+			.skip((page - 1) * limit)
+			.exec();
+
+		const count = await User.find({
+			$or: [{ name: { $regex: '.*' + search + '.*', $options: 'i' } }],
+		}).countDocuments();
+		res.render('userlist', {
+			users: usersData,
+			id: userSession.user_id,
+			choice: userSession.choice,
+			totalpages: Math.ceil(count / limit),
+			currentpage: new Number(page),
+		});
+	} catch (error) {
+		console.log(error.message);
+	}
+};
+
+const loadCategory = async (req, res) => {
+	try {
+		const categoryData = await Category.find();
+		res.render('addCategory',{category:categoryData});
+	} catch (error) {
+		console.log(error.message);
+	}
+};
+const addCategory = async (req, res) => {
+	const category = Category({
+		name: req.body.category,
+	});
+	const categoryData = await category.save();
+	res.redirect('/admin/category');
+};
+const deleteCategory = async (req, res) => {
+	try {
+		const id = req.query.id;
+		await Category.deleteOne({ _id: id });
+		res.redirect('/admin/category');
+	} catch (error) {
+		console.log(error.message);
+	}
+};
+
 module.exports = {
 	loadLogin,
 	verifyLogin,
-	loadDashboard,
+	loadhome,
 	logout,
 	adminDashboard,
 	blockUser,
@@ -306,6 +440,10 @@ module.exports = {
 	adminConfirmCoupon,
 	adminCancelCoupon,
 	adminDeleteCoupon,
-
+	userlist,
+	loadCategory,
+	addCategory,
+	deleteCategory,
+	loadAdminHome,
 };
 

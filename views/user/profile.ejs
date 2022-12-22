@@ -71,7 +71,7 @@
                     <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
                     <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
                     <li class="nav-item cta cta-colored"><a href="/cart" class="nav-link"><span
-                                class="icon-shopping_cart"></span>[0]</a></li>
+                                class="icon-shopping_cart"></span>[<%= product.items.length %>]</a></li>
 
                 </ul>
             </div>
@@ -85,7 +85,7 @@
     
     <div class="row">
         <div class="col-sm-10">
-            <h1><%=User.name%></h1>
+            <h1>Hi,<%=User.name%></h1>
         </div>
     </div>
     <div class="row">
@@ -109,9 +109,7 @@
 
             <ul class="list-group">
                 <li class="list-group-item text-muted">Activity <i class="fa fa-dashboard fa-1x"></i></li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Orders</strong></span> </li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>wishlist</strong></span> 13</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Cart</strong></span> 11</li>
+                <li class="list-group-item text-right"><span class="pull-left"><strong>Cart</strong></span> <%= product.items.length %></li>
             </ul>
 
 
