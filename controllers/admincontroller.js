@@ -379,7 +379,7 @@ const userlist = async (req, res) => {
 		const count = await User.find({
 			$or: [{ name: { $regex: '.*' + search + '.*', $options: 'i' } }],
 		}).countDocuments();
-		res.render('userList', {
+		res.render('userlist', {
 			users: usersData,
 			id: userSession.user_id,
 			choice: userSession.choice,

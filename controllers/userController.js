@@ -317,17 +317,37 @@ const loadCheckout = async (req, res) => {
 	try {
 		userSession = req.session;
 		const user = await User.findById({ _id: userSession.user_id });
+		
 
 		if (userSession.user_id) {
 			const userData = await User.findById({ _id: userSession.user_id });
 			const completeUser = await userData.populate('cart.items.productId');
-			res.render('checkout', {
-				isLoggedin,
-				cartProducts: completeUser.cart,
-				product: user.cart,
-			});
+			const address = await Address.find();
+			
+			if (req.query.id) {
+				const selAddress = await Address.findById({ _id: req.query.id });
+				console.log('id', req.query.id);
+				res.render('checkout', {
+					isLoggedin,
+					cartProducts: completeUser.cart,
+					product: user.cart,
+					address: address,
+					saveAddress: selAddress
+				});
+			}
+			else {
+				res.render('checkout', {
+					isLoggedin,
+					cartProducts: completeUser.cart,
+					product: user.cart,
+					address: address,
+					saveAddress:''
+					
+					
+				});
+			}
 		} else {
-			res.render('checkout', { isLoggedin, id: userSession.user_id });
+			res.render('checkout', { isLoggedin, id: userSession.user_id ,saveAddress});
 		}
 	} catch (error) {
 		console.log(error.message);
