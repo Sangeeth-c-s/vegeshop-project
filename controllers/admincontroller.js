@@ -298,7 +298,7 @@ const adminDeliveredorder = async (req, res) => {
 };
 const loadcoupons = async (req, res) => {
 	try {
-		res.render('addCoupons');
+		res.render('addcoupons');
 	} catch (error) {
 		console.log(error.message);
 	}
@@ -320,11 +320,11 @@ const addCoupon = async (req, res) => {
 		const couponData = await coupon.save();
 		console.log(couponData);
 		if (couponData) {
-			res.render('addCoupons', {
+			res.render('addcoupons', {
 				message: 'Your registration was successfull.',
 			});
 		} else {
-			res.render('addCoupons', { message: 'Your registration failed' });
+			res.render('addcoupons', { message: 'Your registration failed' });
 		}
 	} catch (error) {
 		console.log(error);
@@ -334,7 +334,7 @@ const addCoupon = async (req, res) => {
 const viewCoupons = async (req, res) => {
 	try {
 		const couponData = await Coupon.find();
-		res.render('viewcoupon',{coupons:couponData});
+		res.render('viewCoupon',{coupons:couponData});
 	} catch (error) {
 		console.log(error.message);
 	}
