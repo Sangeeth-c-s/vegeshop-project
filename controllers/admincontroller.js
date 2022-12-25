@@ -334,7 +334,7 @@ const addCoupon = async (req, res) => {
 const viewCoupons = async (req, res) => {
 	try {
 		const couponData = await Coupon.find();
-		res.render('viewCoupon',{coupons:couponData});
+		res.render('viewcoupon',{coupons:couponData});
 	} catch (error) {
 		console.log(error.message);
 	}
