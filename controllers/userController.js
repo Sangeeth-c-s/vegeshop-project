@@ -481,7 +481,8 @@ const editwishQty = async (req, res) => {
 
 const vegetables = async (req, res) => {
 	try {
-  
+		const user = await User.findById({ _id: userSession.user_id });
+		
 		userSession = req.session;
 		userSession.choice ='vegetable';
 		var search = '';
@@ -511,6 +512,7 @@ const vegetables = async (req, res) => {
 			id: userSession.user_id,
 			totalpages: Math.ceil(count / limit),
 			currentpage: new Number(page),
+			product: user.cart,
 		});
    
     
@@ -521,7 +523,8 @@ const vegetables = async (req, res) => {
 
 const fruits = async (req, res) => {
 	try {
-   
+		const user = await User.findById({ _id: userSession.user_id });
+		
 		userSession = req.session;
 		userSession.choice = 'fruits';
 		var search = '';
@@ -554,6 +557,8 @@ const fruits = async (req, res) => {
 			id: userSession.user_id,
 			totalpages: Math.ceil(count / limit),
 			currentpage: new Number(page),
+			product: user.cart,
+
 		});
 	} catch (error) {
 		console.log(error.message);
@@ -562,7 +567,8 @@ const fruits = async (req, res) => {
 
 const juice = async (req, res) => {
 	try {
-    
+		const user = await User.findById({ _id: userSession.user_id });
+		
 		userSession = req.session;
 		userSession.choice = 'juice';
 		var search = '';
@@ -595,6 +601,7 @@ const juice = async (req, res) => {
 			id: userSession.user_id,
 			totalpages: Math.ceil(count / limit),
 			currentpage: new Number(page),
+			product: user.cart,
 		});
 	} catch (error) {
 		console.log(error.message);
@@ -603,7 +610,8 @@ const juice = async (req, res) => {
 
 const dried = async (req, res) => {
 	try {
-   
+		const user = await User.findById({ _id: userSession.user_id });
+		
 		userSession = req.session;
 		userSession.choice = 'dried';
 		var search = '';
@@ -632,10 +640,11 @@ const dried = async (req, res) => {
 		res.render('shop', {
 			isLoggedin,
 			products: productData,
-			choice:userSession.choice,
+			choice: userSession.choice,
 			id: userSession.user_id,
 			totalpages: Math.ceil(count / limit),
 			currentpage: new Number(page),
+			product: user.cart,
 		});
 	} catch (error) {
 		console.log(error.message);
