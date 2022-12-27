@@ -655,9 +655,8 @@ const paypalcheckout = async (req, res) => {
 
 const orderSuccess = async (req, res) => {
 	try {
-		console.log('555');
+		
 		userSession = req.session;
-		console.log(userSession, '1');
 		if (userSession.user_id) {
 			const orderData = await Orders.findOne({ userId: req.session.userID });
 			console.log('orderdata',orderData);
