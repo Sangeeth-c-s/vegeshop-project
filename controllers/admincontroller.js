@@ -357,7 +357,7 @@ const adminDeleteCoupon = async (req, res) => {
 
 const userlist = async (req, res) => {
 	try {
-		const usersData = await User.find({ is_admin: 0 });
+		
 		userSession = req.session;
 		userSession.choice = 'All';
 		var search = '';
@@ -369,18 +369,24 @@ const userlist = async (req, res) => {
 			page = req.query.page;
 		}
 		const limit = 8;
-		const user = await User.find({
-			$or: [{ name: { $regex: '.*' + search + '.*', $options: 'i' } }],
+		const users = await User.find({
+			$or: [
+				{ name: { $regex: '.*' + search + '.*', $options: 'i' } },
+				{ email: { $regex: '.*' + search + '.*', $options: 'i' } },
+			],
 		})
 			.limit(limit * 1)
 			.skip((page - 1) * limit)
 			.exec();
 
 		const count = await User.find({
-			$or: [{ name: { $regex: '.*' + search + '.*', $options: 'i' } }],
+			$or: [
+				{ name: { $regex: '.*' + search + '.*', $options: 'i' } },
+				{ name: { $regex: '.*' + search + '.*', $options: 'i' } },
+			],
 		}).countDocuments();
 		res.render('userList', {
-			users: usersData,
+			users: users,
 			id: userSession.user_id,
 			choice: userSession.choice,
 			totalpages: Math.ceil(count / limit),
