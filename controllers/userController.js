@@ -331,7 +331,7 @@ const loadCheckout = async (req, res) => {
 					isLoggedin,
 					cartProducts: completeUser.cart,
 					product: user.cart,
-					address: saddress,
+					saddress: address,
 					saveAddress: selAddress
 				});
 			}
@@ -340,7 +340,7 @@ const loadCheckout = async (req, res) => {
 					isLoggedin,
 					cartProducts: completeUser.cart,
 					product: user.cart,
-					address: address,
+					saddress: address,
 					saveAddress:''
 					
 					
