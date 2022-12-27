@@ -331,7 +331,7 @@ const loadCheckout = async (req, res) => {
 					isLoggedin,
 					cartProducts: completeUser.cart,
 					product: user.cart,
-					address: address,
+					address: saddress,
 					saveAddress: selAddress
 				});
 			}
