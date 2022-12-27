@@ -331,7 +331,7 @@ const loadCheckout = async (req, res) => {
 					isLoggedin,
 					cartProducts: completeUser.cart,
 					product: user.cart,
-					saddress: address,
+					address: address,
 					saveAddress: selAddress
 				});
 			}
@@ -340,7 +340,7 @@ const loadCheckout = async (req, res) => {
 					isLoggedin,
 					cartProducts: completeUser.cart,
 					product: user.cart,
-					saddress: address,
+					address: address,
 					saveAddress:''
 					
 					
@@ -719,6 +719,7 @@ const couponCheck = async (req, res) => {
 			const userData = await User.findById({ _id: req.session.user_id });
 			const offerData = await Coupon.findOne({ code: req.body.couponCode });
 			const completeUser = await userData.populate('cart.items.productId');
+			const address = await Address.find();
 			console.log(offerData.usedBy,'hi');
      
 			if (offerData) {
@@ -746,22 +747,28 @@ const couponCheck = async (req, res) => {
 					res.render('checkout', {
 						isLoggedin,
 						cartProducts: completeUser.cart,
+						address,saveAddress:''
 					});
 				}
         
 			} else {
+				const address = await Address.find();
 				console.log('no coupon');
 				res.render('checkout', {
 					isLoggedin,
-					cartProducts: completeUser.cart,message:'Invalid Coupon'
+					cartProducts: completeUser.cart, message: 'Invalid Coupon',
+					address,saveAddress:''
+					
 				});
 			}
 
 		} else {
+			const address = await Address.find();
 			res.render('checkout', {
 				isLoggedin,
 				cartProducts: completeUser.cart,
 				message: 'Invalid Coupon',
+				address,saveAddress:''
 			});
 		}
 	}

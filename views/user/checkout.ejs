@@ -101,15 +101,15 @@
                         <form action="/checkout" method="post" class="billing-form">
                             <div class="col-lg-4 mt-5 cart-wrap ftco-animate form-group">
                                 <h5>Saved Address</h5>
-                                <% if(saddress.length>0){
-                                    for(i=1;i<=saddress.length;i++){ %>
+                                <% if(address.length>0){
+                                    for(i=1;i<=address.length;i++){ %>
                                         <div class="cart-total mb-3">
-                                            <%= saddress[i-1].name %>
-                                                <%= saddress[i-1].country %>,
-                                                    <%= saddress[i-1].address %>,
-                                                        <%= saddress[i-1].city %>,
-                                                            <%= saddress[i-1].zip %> <br>
-                                                                <a type="submit" href="/checkout?id=<%= saddress[i-1]._id %>">Select</a>
+                                            <%= address[i-1].name %>
+                                                <%= address[i-1].country %>,
+                                                    <%= address[i-1].address %>,
+                                                        <%= address[i-1].city %>,
+                                                            <%= address[i-1].zip %> <br>
+                                                                <a type="submit" href="/checkout?id=<%= address[i-1]._id %>">Select</a>
                                         </div>
                                         <%}}%>
                             
