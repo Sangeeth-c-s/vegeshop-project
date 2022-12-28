@@ -96,4 +96,7 @@ user_route.post('/coupon', auth.isLogin, userController.couponCheck);
 
 user_route.get('/order-details', auth.isLogin, userController.orderDetails);
 
+user_route.get('/view-product', auth.isLogin, userController.viewProduct);
+
+
 module.exports = user_route;

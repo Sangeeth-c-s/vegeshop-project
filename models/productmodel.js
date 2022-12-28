@@ -33,6 +33,12 @@ const productSchema = new mongoose.Schema({
 	image: {
 		type: String,
 	},
+	image1: {
+		type: String,
+	},
+	image2: {
+		type: String,
+	},
 	soft: {
 		type: Number,
 		required: true,

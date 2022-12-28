@@ -323,7 +323,9 @@ const loadCheckout = async (req, res) => {
 			const userData = await User.findById({ _id: userSession.user_id });
 			const completeUser = await userData.populate('cart.items.productId');
 			const address = await Address.find();
-			
+			let discount;
+			const userCheck = await User.findById({ _id: req.session.user_id });
+
 			if (req.query.id) {
 				const selAddress = await Address.findById({ _id: req.query.id });
 				console.log('id', req.query.id);
@@ -332,7 +334,9 @@ const loadCheckout = async (req, res) => {
 					cartProducts: completeUser.cart,
 					product: user.cart,
 					address: address,
-					saveAddress: selAddress
+					saveAddress: selAddress,
+					discount,
+					total: userCheck.cart.totalPrice,
 				});
 			}
 			else {
@@ -341,13 +345,23 @@ const loadCheckout = async (req, res) => {
 					cartProducts: completeUser.cart,
 					product: user.cart,
 					address: address,
-					saveAddress:''
-					
-					
+					saveAddress: '',
+					discount,
+					total: userCheck.cart.totalPrice,
 				});
 			}
 		} else {
-			res.render('checkout', { isLoggedin, id: userSession.user_id ,saveAddress});
+			
+			const userCheck = await User.findById({ _id: req.session.user_id });
+
+			
+			res.render('checkout', {
+				isLoggedin,
+				id: userSession.user_id,
+				saveAddress,
+				discount,
+				total: userCheck.cart.totalPrice,
+			});
 		}
 	} catch (error) {
 		console.log(error.message);
@@ -379,11 +393,12 @@ const storeOrder = async (req, res) => {
 					// state: req.body.state,
 					zip: req.body.zip,
 					products: completeUser.cart,
-					// offer: offer.name,
+					
 				});
 				console.log('hi');
-				const orderData = await order.save();
-				req.session.currentOrder = order._id;
+				const orderData = await Orders.save();
+				req.session.currentOrder = Orders._id;
+				
 
 				if (req.body.payment == 'Cash-on-Dilevery') {
 					res.redirect('/orderSuccess');
@@ -737,7 +752,8 @@ const couponCheck = async (req, res) => {
 					console.log(offerData.usedBy);
 					let updatedTotal =
             userData.cart.totalPrice -
-            (userData.cart.totalPrice * offerData.offer) / 100;
+						(userData.cart.totalPrice * offerData.offer) / 100;
+					let discount = userData.cart.totalPrice - updatedTotal;
 					const userCheck = await User.findById({ _id: req.session.user_id });
 
 					if (userCheck) {
@@ -755,7 +771,8 @@ const couponCheck = async (req, res) => {
 					res.render('checkout', {
 						isLoggedin,
 						cartProducts: completeUser.cart,
-						address,saveAddress:''
+						total:userCheck.cart.totalPrice,
+						address,saveAddress:'',discount
 					});
 				}
         
@@ -764,9 +781,12 @@ const couponCheck = async (req, res) => {
 				console.log('no coupon');
 				res.render('checkout', {
 					isLoggedin,
-					cartProducts: completeUser.cart, message: 'Invalid Coupon',
-					address,saveAddress:''
-					
+					cartProducts: completeUser.cart,
+					message: 'Invalid Coupon',
+					total: userCheck.cart.totalPrice,
+					address,
+					saveAddress: '',
+					discount,
 				});
 			}
 
@@ -776,7 +796,10 @@ const couponCheck = async (req, res) => {
 				isLoggedin,
 				cartProducts: completeUser.cart,
 				message: 'Invalid Coupon',
-				address,saveAddress:''
+				address,
+				saveAddress: '',
+				discount,
+				total: userCheck.cart.totalPrice,
 			});
 		}
 	}
@@ -830,6 +853,24 @@ const addressDetails = async (req, res) => {
 	}
 };
 
+const viewProduct = async (req, res) => {
+	try {
+		const productId = req.query.id;
+		
+		const productData = await Product.findById({ _id: productId });
+		
+		if (productData) {
+			res.render('productDetails',{products:productData});
+		} else {
+			res.redirect('/shop');
+		}
+		
+		
+	} catch (error) {
+		console.log(error.message);
+	}
+};
+
 
 module.exports = {
 	verifyLogin,
@@ -864,4 +905,5 @@ module.exports = {
 	couponCheck,
 	orderDetails,
 	addressDetails,
+	viewProduct,
 };

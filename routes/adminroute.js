@@ -50,7 +50,7 @@ admin_route.get(
 );
 admin_route.post(
 	'/add-product',
-	adminController.upload,
+	adminController.upload.any(),
 	adminController.updateAddProduct
 );
 admin_route.get(
@@ -67,7 +67,7 @@ admin_route.get(
 );
 admin_route.post(
 	'/edit-product',
-	adminController.upload,
+	adminController.upload.any(),
 	adminController.updateEditProduct
 );
 

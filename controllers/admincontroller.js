@@ -1,3 +1,4 @@
+/* eslint-disable no-dupe-keys */
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 const User = require('../models/usermodel');
@@ -183,7 +184,7 @@ let Storage = multer.diskStorage({
 });
 let upload = multer({
 	storage: Storage,
-}).single('gImage');
+});
 
 const viewProduct = async (req, res) => {
 	try {
@@ -257,7 +258,22 @@ const editProduct = async (req, res) => {
 const updateEditProduct = async(req,res)=>{
 	try {
         
-		const productData = await Product.findByIdAndUpdate({ _id: req.body.id }, { $set: { name: req.body.gName, platform: req.body.gPlatform, price: req.body.gPrice, description: req.body.gDescription, image: req.file.filename } }); 
+		const productData = await Product.findByIdAndUpdate(
+			{ _id: req.body.id },
+			{
+				$set: {
+					name: req.body.gName,
+					platform: req.body.gPlatform,
+					price: req.body.gPrice,
+					description: req.body.gDescription,
+					image:
+            req.files[0] && req.files[0].filename ? req.files[0].filename : '',
+					// eslint-disable-next-line no-dupe-keys
+					image1:req.files[1] && req.files[1].filename ? req.files[1].filename : '',
+					image2:req.files[2] && req.files[2].filename ? req.files[2].filename : '',
+				},
+			}
+		); 
 		res.redirect('/admin/view-product');
 
 	} catch (error) {

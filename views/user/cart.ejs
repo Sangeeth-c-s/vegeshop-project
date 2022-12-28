@@ -102,11 +102,26 @@
 
                                     <td class="price">₹<%= key.productId.price %></td>
 
+                                    
                                     <td class="quantity">
-                                        <form action="/edit-qty?id=<%= key._id %>" method="post">
-                                            <div class="nk-form">
-                                                <input type="number" class="form-control" name="qty" value="<%= key.qty %>" min="1" max="21">
-                                                <button class="xy-1 nk-btn nk-btn-rounded nk-btn-color-black float-right" type="submit">Update Quatity</button>
+                                    
+                                        <form action="/edit-qty?id=<%=key._id%>" method="post">
+                                            
+                                            <div class="input-group quantity mx-auto" style="width: 100px;">
+                                                
+                                                    <button  data-decrease type="submit" class="btn btn-sm btn-primary btn-minus">
+                                                         <b>-</b> 
+                                                        
+                                                    </button>
+                                                
+                                                <input data-value type="number" name="qty" class="form-control form-control-sm bg-secondary text-center" min="1"
+                                                    max="10" value="<%=key.qty %>">
+                                                    
+                                                
+                                                    <button  data-increase type="submit"  class="btn btn-sm btn-primary btn-plus"> <b>+</b> 
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                
                                             </div>
                                         </form>
                                     </td>
@@ -337,5 +352,37 @@
             });
 
         });
+        </script>
+        <script>
+        $(function () {
+            $('[data-decrease]').click(decrease);
+            $('[data-increase]').click(increase);
+            $('[data-value]').change(valueChange);
+        });
+
+        function decrease() {
+            var value = $(this).parent().find('[data-value]').val();
+            if (value > 1) {
+                value--;
+                $(this).parent().find('[data-value]').val(value);
+            }
+        }
+
+        function increase() {
+            var value = $(this).parent().find('[data-value]').val();
+            if (value < 100) {
+                value++;
+                $(this).parent().find('[data-value]').val(value);
+            }
+        }
+
+        function valueChange() {
+            var value = $(this).val();
+            if (value == undefined || isNaN(value) == true || value <= 0) {
+                $(this).val(1);
+            } else if (value >= 101) {
+                $(this).val(100);
+            }
+        }
     </script>
     <%- include('../layouts/footer') %>
