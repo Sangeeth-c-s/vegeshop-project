@@ -387,16 +387,12 @@ const storeOrder = async (req, res) => {
 					country: req.body.country,
 					address: req.body.address,
 					city: req.body.city,
-          
-
-          
-					// state: req.body.state,
 					zip: req.body.zip,
 					products: completeUser.cart,
 					
 				});
 				console.log('hi');
-				const orderData = await Orders.save();
+				const orderData = await order.save();
 				req.session.currentOrder = Orders._id;
 				
 
@@ -858,7 +854,7 @@ const viewProduct = async (req, res) => {
 		const productId = req.query.id;
 		
 		const productData = await Product.findById({ _id: productId });
-		
+		console.log(productData,'product');
 		if (productData) {
 			res.render('productDetails',{products:productData});
 		} else {
