@@ -44,6 +44,9 @@ const productSchema = new mongoose.Schema({
 		required: true,
 		default: 0,
 	},
+	qty: {
+		type:Number
+	}
 });
 
 module.exports = mongoose.model('product', productSchema);

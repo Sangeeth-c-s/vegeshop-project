@@ -438,6 +438,16 @@ const deleteCategory = async (req, res) => {
 	}
 };
 
+const salesReport = async (req, res) => {
+	try {
+		const product = await Product.find();
+		const order = await Order.find();
+		res.render('salesReport',{product,order});
+	} catch (error) {
+		console.log(error.message);
+	}	
+};
+
 module.exports = {
 	loadLogin,
 	verifyLogin,
@@ -468,5 +478,6 @@ module.exports = {
 	addCategory,
 	deleteCategory,
 	loadAdminHome,
+	salesReport
 };
 

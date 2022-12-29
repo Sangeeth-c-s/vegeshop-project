@@ -125,6 +125,13 @@ admin_route.post('/category', auth.isLogin, adminController.addCategory);
 
 admin_route.get('/delete-category', auth.isLogin, adminController.deleteCategory);
 
+admin_route.get(
+	'/sales-report',
+	auth.isLogin,
+	adminController.salesReport
+);
+
+
 
 
 

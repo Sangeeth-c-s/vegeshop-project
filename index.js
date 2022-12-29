@@ -28,6 +28,10 @@ app.use(function (req, res, next) {
 	next();
 });
 
+app.use(function (req, res) {
+	res.status(404).render('user/404page.ejs');
+});
+
 user_route.set('view engine', 'ejs');
 user_route.set('views', './views/user');
 user_route.use('/', express.static('public'));

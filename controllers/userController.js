@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 const User = require('../models/usermodel');
@@ -393,7 +394,23 @@ const storeOrder = async (req, res) => {
 				});
 				console.log('hi');
 				const orderData = await order.save();
-				req.session.currentOrder = Orders._id;
+				  // eslint-disable-next-line no-mixed-spaces-and-tabs
+				req.session.currentOrder = order._id;
+				
+				const corder = await Orders.findById({ _id: req.session.currentOrder });
+				const productDetails = await Product.find();
+				
+				for (let i = 0; i < productDetails.length; i++) {
+					
+					for (let j = 0; j < corder.products.items.length; j++) {
+						console.log('pro', productDetails[i]._id);
+						console.log('ord', corder.products.items[j].productId);
+						if (productDetails[i]._id.equals(corder.products.items[j].productId)) {
+							productDetails[i].qty += corder.products.items[j].qty;
+						}
+					}
+					productDetails[i].save();
+				}
 				
 
 				if (req.body.payment == 'Cash-on-Dilevery') {
